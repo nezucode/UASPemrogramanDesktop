@@ -3,42 +3,6 @@ import java.util.Scanner;
 import java.io.*;
 import java.util.InputMismatchException;  
 
-//class connectDatabase {
-//	
-//		
-//		void connectDB() {
-//			try {
-//				
-//				
-//				
-//				//Create a query to database
-//				String sql = "SELECT * FROM mahasiswa";
-//				
-//				//Execute the query and save the result on object ResultSet
-//				rs = stmt.executeQuery(sql);
-//				
-//				//Show the result
-//				System.out.println("=================================");
-//				System.out.println("=======Daftar Nama Mahasiswa=====");
-//				System.out.println("=================================");
-//				while(rs.next()) {
-//					System.out.println("ID: " + rs.getInt("id"));
-//					System.out.println("Nama: " + rs.getString("nama"));
-//					System.out.println("Alamat: " + rs.getString("alamat"));
-//					System.out.println("=================================");
-//				}
-//				stmt.close();
-//				conn.close();
-//			} catch (SQLException ex) {
-//				System.out.println("An error occurred while connecting MySQL databse");
-//				ex.printStackTrace();
-//			}
-//		}
-//}
-
-class Menu {
-	
-}
 public class Main {
 	//Connect to Database
 	static final String DB_URL = "jdbc:mysql://localhost:3306/mahasiswa";
@@ -119,8 +83,6 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	static void showMahasiswa() {
