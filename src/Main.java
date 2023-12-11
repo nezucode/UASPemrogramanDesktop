@@ -7,15 +7,17 @@ import java.util.InputMismatchException;
 public class Main {
 
 	public static void main(String[] args) {
-		int nilai1 = 3;
-		int nilai2 = 5;
-		int nilai3 = 2;
+		int nilai = 80;
 		
-		int tambah = nilai1 + nilai2 + nilai3;
-		int result = tambah / 3;
-		
-		System.out.println("Hasil rata-rata adalah: " + result);
-		
+		if (nilai > 81) {
+			System.out.println("Tono diterima di Perguruan Tinggi A");
+		} else if (nilai >= 71 && nilai   <= 80) {
+			System.out.println("Tono diterima di Perguruan Tinggi B");
+		} else if (nilai >= 61 && nilai  <= 70) {
+			System.out.println("Tono diterima di Perguruan Tinggi C");
+		} else {
+			System.out.println("Tono diterima di Perguruan Tinggi D");
+		}
 	}
 
 }
