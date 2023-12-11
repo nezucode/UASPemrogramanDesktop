@@ -1,66 +1,168 @@
 import java.sql.*;
-import java.sql.Connection;
 import java.util.Scanner;
 import java.io.*;
 import java.util.InputMismatchException;  
 
-abstract class Matematika {
-	abstract int luas();
-}
+//class connectDatabase {
+//	
+//		
+//		void connectDB() {
+//			try {
+//				
+//				
+//				
+//				//Create a query to database
+//				String sql = "SELECT * FROM mahasiswa";
+//				
+//				//Execute the query and save the result on object ResultSet
+//				rs = stmt.executeQuery(sql);
+//				
+//				//Show the result
+//				System.out.println("=================================");
+//				System.out.println("=======Daftar Nama Mahasiswa=====");
+//				System.out.println("=================================");
+//				while(rs.next()) {
+//					System.out.println("ID: " + rs.getInt("id"));
+//					System.out.println("Nama: " + rs.getString("nama"));
+//					System.out.println("Alamat: " + rs.getString("alamat"));
+//					System.out.println("=================================");
+//				}
+//				stmt.close();
+//				conn.close();
+//			} catch (SQLException ex) {
+//				System.out.println("An error occurred while connecting MySQL databse");
+//				ex.printStackTrace();
+//			}
+//		}
+//}
 
-class Segitiga extends Matematika {
-	int alas;
-	int tinggi;
+class Menu {
 	
-	public Segitiga(int alas, int tinggi) {
-		this.alas = alas;
-		this.tinggi = tinggi;
-	}
-	
-	@Override
-	int luas() {
-		return alas * tinggi / 2; 
-	}
 }
-
-class PersegiPanjang extends Matematika {
-	int panjang;
-	int lebar;
-	
-	public PersegiPanjang(int panjang, int lebar) {
-		this.panjang = panjang;
-		this.lebar = lebar;
-	}
-	
-	@Override
-	int luas() {
-		return panjang * lebar;
-	}
-}
-
 public class Main {
+	//Connect to Database
+	static final String DB_URL = "jdbc:mysql://localhost:3306/mahasiswa";
+	static final String USER = "root";
+	static final String PASS = "";
+	static Connection conn;
+	static Statement stmt;
+	static ResultSet rs;
+	static InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+	static BufferedReader input = new BufferedReader(inputStreamReader);
+	
 	public static void main(String[] args) {
-		Segitiga segitiga = new Segitiga(8, 10);
-		PersegiPanjang ppanjang = new PersegiPanjang(2, 4);
+		try {
+			//Create a connection to database
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			
+			//Create a statement object
+			stmt = conn.createStatement();
+			
+			while (!conn.isClosed()) {
+				showMenu();
+			}
+			stmt.close();
+			stmt.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	static void showMenu() {
+		System.out.println("=========== MENU UTAMA ===========");
+		System.out.println("==================================");
+		System.out.println("1. Input Data");
+		System.out.println("2. Tampil Data");
+		System.out.println("3. Update Data");
+		System.out.println("0. Keluar");
+		System.out.print("PILIHAN > ");
 		
-		int alas = segitiga.alas;
-		int tinggi = segitiga.tinggi;
-		int luasSegitiga = segitiga.luas();
+		try {
+			Scanner sc = new Scanner(System.in);
+			int pilihan = sc.nextInt();
+			switch(pilihan) {
+			case 0:
+				System.exit(0);
+				break;
+			case 1:
+				insertMahasiswa();
+				break;
+			case 2:
+				showMahasiswa();
+				break;
+			case 3:
+				updateMahasiswa();
+				break;
+				default:
+					System.out.println("Pilihan salah.");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	static void insertMahasiswa() {
+		try {
+			System.out.print("Nama: ");
+			String nama = input.readLine().trim();
+			System.out.print("Alamat: ");
+			String alamat = input.readLine().trim();
+			
+			//Save query
+			String sql = "INSERT INTO mahasiswa (nama, alamat) VALUE ('%s','%s')";
+			sql = String.format(sql, nama, alamat);
+			
+			//Save mahasiswa
+			stmt.execute(sql);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		int panjang = ppanjang.panjang;
-		int lebar = ppanjang.lebar;
-		int luasPPanjang = ppanjang.luas();
 		
-		System.out.println("===Segitiga===");
-		System.out.println("Alas: " + alas);
-		System.out.println("Tinggi: " + tinggi);
-		System.out.println("Luas dari segitiga berikut adalah: " + luasSegitiga);
-		System.out.println("==============");
-		System.out.println("===Persegi Panjang===");
-		System.out.println("Panjang: " + panjang);
-		System.out.println("Lebar: " + lebar);
-		System.out.println("Luas dari persegi panjang berikut adalah: " + luasPPanjang);
-		System.out.println("=====================");
+	}
+	
+	static void showMahasiswa() {
+		//Create a query to database
+		String sql = "SELECT * FROM mahasiswa";
 		
+		try {
+			//Execute the query and save the result on object ResultSet
+			rs = stmt.executeQuery(sql);
+			
+			//Show the result
+			System.out.println("=================================");
+			System.out.println("=======Daftar Nama Mahasiswa=====");
+			System.out.println("=================================");
+			while(rs.next()) {
+				System.out.println("ID: " + rs.getInt("id"));
+				System.out.println("Nama: " + rs.getString("nama"));
+				System.out.println("Alamat: " + rs.getString("alamat"));
+				System.out.println("=================================");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	static void updateMahasiswa() {
+		try {
+			System.out.print("ID yang akan diedit: ");
+			int id = Integer.parseInt(input.readLine());
+			System.out.print("Nama: ");
+			String nama = input.readLine().trim();
+			System.out.print("Alamat: ");
+			String alamat = input.readLine().trim();
+			
+			//Query update
+			String sql = "UPDATE mahasiswa SET nama='%s', alamat='%s' WHERE id=%d";
+			sql = String.format(sql, nama, alamat, id);
+			
+			//Update mahasiswa
+			stmt.execute(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
